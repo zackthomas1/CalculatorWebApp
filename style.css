@@ -1,0 +1,12 @@
+body{
+    background-color: hsl(210, 10%, 92%);
+}
+
+#app_container{
+    background-color: hsl(208, 100%, 98%);
+}
+
+.btn-light{
+    background-color:hsl(210, 10%, 92%);
+
+}
