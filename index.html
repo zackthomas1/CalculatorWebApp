@@ -11,10 +11,15 @@
 <body>
 
     <h1 class="text-center my-4">Calculator App</h1>
-    <div id="calc_container" class="container-fluid center">
+    <div id="app_container" class="container-fluid center">
 
-        <div id="display-container" class="row my-2 border">
-            <h2 id="display" class="text-center">0</h2>
+        <div id="display-container" class="container">
+            <p id="expression" class="tex-right m-0">expression state</p>
+
+            <div id="display-container" class="row my-2">
+                <h2 id="value_display" class="text-center col border">0</h2>
+                <h2 id="operation_display" class="col-1 border"></h2>
+            </div>
         </div>
 
         <div id="numberBtns" class="container-fluid">
@@ -52,12 +57,17 @@
                 <button id="btn_0"  class="btn btn-primary mx-1 col-5">0</button>
                 <button id="btn_decimal" class="btn btn-primary mx-1 col">.</button>
                 <button id="btn_equal" class="btn btn-primary mx-1 col-3">=</button>
-
             </div>
-    
         </div>
-
-
+   
+        <div id="history_container" class="container ">
+            <h2 class="text-center">History</h2>
+            <div id="history_list" class="border">
+                <ul id="" class="">
+    
+                </ul>
+            </div>
+        </div>
     </div>
     
     <script src="app.js"></script>
