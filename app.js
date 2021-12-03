@@ -229,6 +229,7 @@ function evaulateExpression(){
             exprSolution = leftOperand.value / rightOperand.value;
             break; 
         default: 
+            throw new Error("No operation selected");
             break;        
     }
 
@@ -325,6 +326,17 @@ document.querySelector("#btn_clear").addEventListener('click', () => handleClear
 document.querySelector("#btn_backspace").addEventListener('click', () => handleBackspaceBtnEvent())
 
 // 
+document.querySelector('#history_list').addEventListener('click', function(e){
+    let targetSolution = e.target.querySelector("#solution")
+
+    reset(); 
+    expression.textContent = "";
+
+    leftOperand.string_value = targetSolution.textContent
+    valueDisplay.textContent = leftOperand.string_value
+    isLeftOperandActive = false;
+
+})
 
 // keyboard events 
 // ---------------
