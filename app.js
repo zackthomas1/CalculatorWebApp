@@ -235,7 +235,7 @@ function evaulateExpression(){
 
     // post evaluation reset state
     updateExpressionStr(); 
-    addToHistoryList(exprSolution);
+    addItemToHistoryList(exprSolution);
 
     reset(); 
     leftOperand.string_value = exprSolution.toString();
@@ -254,7 +254,7 @@ function updateExpressionStr(){
     }
 }
 
-function addToHistoryList(solution)
+function addItemToHistoryList(solution)
 {
     let LiElem = document.createElement('li'); 
     let pElem = document.createElement('p'); 
@@ -270,7 +270,7 @@ function addToHistoryList(solution)
     pElem.classList.add("m-0");
     pElem.innerHTML = `${expressionSpan.outerHTML}  =  ${solutionSpan.outerHTML}`
 
-    LiElem.id = ""
+    LiElem.id = "historyItem"
     LiElem.classList.add('list-group-item');
     LiElem.appendChild(pElem); 
     
@@ -325,7 +325,7 @@ document.querySelector("#btn_equal").addEventListener('click', () => evaulateExp
 document.querySelector("#btn_clear").addEventListener('click', () => handleClearBtnEvent())
 document.querySelector("#btn_backspace").addEventListener('click', () => handleBackspaceBtnEvent())
 
-// 
+// history list
 document.querySelector('#history_list').addEventListener('click', function(e){
     let targetSolution = e.target.querySelector("#solution")
 
@@ -336,6 +336,19 @@ document.querySelector('#history_list').addEventListener('click', function(e){
     valueDisplay.textContent = leftOperand.string_value
     isLeftOperandActive = false;
 
+})
+
+document.querySelector('#history_list').addEventListener('mouseover', function(e){
+    let target = e.target;
+
+    target.classList.add('list-group-item-light');
+    
+})
+
+document.querySelector('#history_list').addEventListener('mouseout', function(e){
+    let target = e.target;
+
+    target.classList.remove('list-group-item-light');    
 })
 
 // keyboard events 

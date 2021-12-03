@@ -8,5 +8,12 @@ body{
 
 .btn-light{
     background-color:hsl(210, 10%, 92%);
-
 }
+
+.list-group-item{
+    background-color: hsl(208, 100%, 98%);
+}
+
+/* .list-group-item:hover{
+    background-color: red
+} */
