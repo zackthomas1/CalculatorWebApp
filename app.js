@@ -18,12 +18,14 @@ class Operand{
         this.string_value = "";
         this.value = 0;
         this.sign = SignValueEnum.POSTIVE;
+        this.isDecimalActive = false;
     }
 
     clear(){
         this.string_value = "";
         this.value = 0;
         this.sign = SignValueEnum.POSTIVE;
+        this.isDecimalActive = false;
     }
 }
 
@@ -38,9 +40,11 @@ let leftOperand = new Operand();
 let rightOperand = new Operand()
 
 let operation = OperationEnum.None;
-let opStr = "";
+let _opStr = "";
 
-let isLeftOperandActive = true;
+let _isLeftOperandActive = true;
+let _roundingFactor = 100000;
+
 
 //
 
@@ -49,7 +53,7 @@ let isLeftOperandActive = true;
 function handleNumberBtnEvent(number_str){
     console.log(number_str);
 
-    if(isLeftOperandActive)
+    if(_isLeftOperandActive)
     {
         if(number_str === '0' && leftOperand.string_value.length === 0)
         {
@@ -80,32 +84,32 @@ function handleOperationBtnEvent(operation_enum){
     {
         case OperationEnum.ADDITION:
             console.log("+");
-            opStr = "+";
+            _opStr = "+";
             break; 
         case OperationEnum.SUBTRACTION:
             console.log("-");
-            opStr = "-";
+            _opStr = "-";
             break; 
         case OperationEnum.MULTIPLICATION:
             console.log("x");
-            opStr = "x";
+            _opStr = "x";
             break; 
         case OperationEnum.DIVISION:
             console.log("/");
-            opStr = "/";
+            _opStr = "/";
             break; 
         default: 
             break;         
     }   
-    operationDisplay.textContent = opStr;
+    operationDisplay.textContent = _opStr;
 
     updateExpressionStr();
 
-    isLeftOperandActive = false;
+    _isLeftOperandActive = false;
 }
 
 function handleOperandSignBtnEvent(){
-    if(isLeftOperandActive)
+    if(_isLeftOperandActive)
     {
         leftOperand.sign *= -1; // flips sign value
 
@@ -141,26 +145,34 @@ function handleDecimalBtnEvent(){
 
     console.log(".");
 
-    if(isLeftOperandActive)
+    if(_isLeftOperandActive)
     {
-        if(leftOperand.string_value.length == 0)
+        if(!leftOperand.isDecimalActive)
         {
-            leftOperand.string_value += "0.";
-            valueDisplay.textContent = leftOperand.string_value;    
-        }else
-        {
-            leftOperand.string_value += ".";
-            valueDisplay.textContent = leftOperand.string_value;    
+            if(leftOperand.string_value.length == 0)
+            {
+                leftOperand.string_value += "0.";
+                valueDisplay.textContent = leftOperand.string_value;    
+            }else
+            {
+                leftOperand.string_value += ".";
+                valueDisplay.textContent = leftOperand.string_value;    
+            }
+            leftOperand.isDecimalActive = true;
         }
     }else{
-        if(rightOperand.string_value.length === 0)
+        if(!rightOperand.isDecimalActive)
         {
-            rightOperand.string_value += "0.";
-            valueDisplay.textContent = rightOperand.string_value;  
-        }else
-        {
-            rightOperand.string_value += ".";
-            valueDisplay.textContent = rightOperand.string_value;    
+            if(rightOperand.string_value.length === 0)
+            {
+                rightOperand.string_value += "0.";
+                valueDisplay.textContent = rightOperand.string_value;  
+            }else
+            {
+                rightOperand.string_value += ".";
+                valueDisplay.textContent = rightOperand.string_value;    
+            }
+            rightOperand.isDecimalActive = true;
         }
     }
 }
@@ -168,8 +180,14 @@ function handleDecimalBtnEvent(){
 function handleBackspaceBtnEvent(){
     console.log("backspace"); 
 
-    if(isLeftOperandActive)
+    if(_isLeftOperandActive)
     {
+        
+        if(leftOperand.string_value[leftOperand.string_value.length-1] === '.')
+        {
+            leftOperand.isDecimalActive = false;
+        }
+
         leftOperand.string_value = leftOperand.string_value.substring(0,leftOperand.string_value.length-1);
        
         if(leftOperand.string_value.length == 0)
@@ -182,6 +200,11 @@ function handleBackspaceBtnEvent(){
     }
     else
     {
+        if(rightOperand.string_value[rightOperand.string_value.length-1] === '.')
+        {
+            rightOperand.isDecimalActive = false;
+        }
+
         rightOperand.string_value = rightOperand.string_value.substring(0,rightOperand.string_value.length-1);
 
         if(rightOperand.string_value.length == 0)
@@ -200,9 +223,9 @@ function handleClearBtnEvent(){
 }
 
 function handleKeyboardEvent(e){
-    console.log(e);
+    // console.log(e);
     console.log(e.code);
-    console.log(e.shiftKey)
+    console.log("shiftActive: " + e.shiftKey)
 
     switch(e.code)
     {
@@ -336,29 +359,30 @@ function evaulateExpression(){
             break;        
     }
 
-    // post evaluation reset state
-
+    // post evaluation reset 
+    // leftOperand.string_value = (Math.round((leftOperand.value*_roundingFactor))/_roundingFactor).toString();
+    // rightOperand.string_value = (Math.round((rightOperand.value*_roundingFactor))/_roundingFactor).toString();
+    let exprSolutionStr = (Math.round((exprSolution*_roundingFactor))/_roundingFactor).toString();
+    
     updateExpressionStr(); 
-    addItemToHistoryList(exprSolution);
+    addItemToHistoryList(exprSolutionStr);
 
     reset(); 
-    leftOperand.string_value = exprSolution.toString();
-    valueDisplay.textContent = exprSolution;
-
+    leftOperand.string_value = exprSolutionStr;
+    valueDisplay.textContent = exprSolutionStr;
 }
 
 function updateExpressionStr(){
-
-    if(isLeftOperandActive)
+    if(_isLeftOperandActive)
     { 
-        expression.textContent = leftOperand.string_value + opStr; 
+        expression.textContent = leftOperand.string_value + _opStr; 
     }
     else{
-        expression.textContent = leftOperand.string_value + opStr + rightOperand.string_value + "="; 
+        expression.textContent = leftOperand.string_value + _opStr + rightOperand.string_value + "="; 
     }
 }
 
-function addItemToHistoryList(solution)
+function addItemToHistoryList(solutionStr)
 {
     let LiElem = document.createElement('li'); 
     let pElem = document.createElement('p'); 
@@ -368,8 +392,8 @@ function addItemToHistoryList(solution)
 
     expressionSpan.id = "exprs"; 
     solutionSpan.id = "solution";
-    expressionSpan.textContent = leftOperand.string_value + opStr + rightOperand.string_value; 
-    solutionSpan.textContent = solution;
+    expressionSpan.textContent = leftOperand.string_value + _opStr + rightOperand.string_value; 
+    solutionSpan.textContent = solutionStr;
 
     pElem.classList.add("m-0");
     pElem.innerHTML = `${expressionSpan.outerHTML}  =  ${solutionSpan.outerHTML}`
@@ -392,7 +416,7 @@ function reset(){
 
     operation = OperationEnum.None;
 
-    isLeftOperandActive = true;
+    _isLeftOperandActive = true;
 }
 
 // event listeners
@@ -438,7 +462,7 @@ document.querySelector('#history_list').addEventListener('click', function(e){
 
     leftOperand.string_value = targetSolution.textContent
     valueDisplay.textContent = leftOperand.string_value
-    isLeftOperandActive = false;
+    _isLeftOperandActive = true;
 
 })
 
