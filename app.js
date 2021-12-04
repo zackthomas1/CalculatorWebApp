@@ -199,6 +199,109 @@ function handleClearBtnEvent(){
     reset();
 }
 
+function handleKeyboardEvent(e){
+    console.log(e);
+    console.log(e.code);
+    console.log(e.shiftKey)
+
+    switch(e.code)
+    {
+        case "Numpad0":
+
+        case "Digit0":
+            handleNumberBtnEvent('0');
+            break;
+        case "Numpad1":
+
+        case "Digit1":
+            handleNumberBtnEvent('1');
+            break;
+        case "Numpad2":
+
+        case "Digit2":
+            handleNumberBtnEvent('2');
+            break;
+        case "Numpad3":
+
+        case "Digit3":
+            handleNumberBtnEvent('3');
+            break;
+        case "Numpad4":
+
+        case "Digit4":
+            handleNumberBtnEvent('4');
+            break;
+        case "Numpad5":
+
+        case "Digit5":
+            handleNumberBtnEvent('5');
+            break;
+        case "Numpad6":
+
+        case "Digit6":
+            handleNumberBtnEvent('6');
+            break;
+        case "Numpad7":
+
+        case "Digit7":
+            handleNumberBtnEvent('7');
+            break;       
+        case "Numpad8":
+
+        case "Digit8":
+            if(e.shiftKey === true)
+            {
+                handleOperationBtnEvent(OperationEnum.MULTIPLICATION);
+            }
+            else{
+                handleNumberBtnEvent('8');
+            }
+            break;
+        case "Numpad9":
+
+        case "Digit9":
+            handleNumberBtnEvent('9');
+            break;   
+        case "Equal":
+            if(e.shiftKey === true)
+            {
+                handleOperationBtnEvent(OperationEnum.ADDITION);
+            }
+            else
+            {
+                evaulateExpression();
+            }
+            break;
+        case "NumpadAdd":
+            handleOperationBtnEvent(OperationEnum.ADDITION);
+            break;
+        case "Minus":
+ 
+        case "NumpadSubtract":
+            handleOperationBtnEvent(OperationEnum.SUBTRACTION);
+            break;  
+        case "NumpadMultiply":
+            handleOperationBtnEvent(OperationEnum.MULTIPLICATION);
+            break;  
+        case "Slash":
+
+        case "NumpadDivide":
+            handleOperationBtnEvent(OperationEnum.DIVISION);
+            break;  
+        case "NumpadEnter": 
+            evaulateExpression();
+            break;
+        case "period": 
+            
+        case "NumpadDecimal": 
+            handleDecimalBtnEvent()
+            break;
+        default:
+            break;
+
+    }
+}
+
 function evaulateExpression(){
 
     // get operand values
@@ -234,6 +337,7 @@ function evaulateExpression(){
     }
 
     // post evaluation reset state
+
     updateExpressionStr(); 
     addItemToHistoryList(exprSolution);
 
@@ -353,4 +457,6 @@ document.querySelector('#history_list').addEventListener('mouseout', function(e)
 
 // keyboard events 
 // ---------------
-
+document.addEventListener('keypress', function(e){
+    handleKeyboardEvent(e);
+})
