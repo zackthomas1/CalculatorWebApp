@@ -43,7 +43,7 @@ let operation = OperationEnum.None;
 let _opStr = "";
 
 let _isLeftOperandActive = true;
-let _roundingFactor = 100000;
+let _roundingFactor = 1000;
 
 
 //
@@ -136,7 +136,6 @@ function handleOperandSignBtnEvent(){
             rightOperand.string_value = rightOperand.string_value.substring(1,rightOperand.string_value.length);
         }
         valueDisplay.textContent = rightOperand.string_value;   
-
 }
 
 }
@@ -483,4 +482,13 @@ document.querySelector('#history_list').addEventListener('mouseout', function(e)
 // ---------------
 document.addEventListener('keypress', function(e){
     handleKeyboardEvent(e);
+})
+
+document.addEventListener('keydown', function(e){
+    const key = e.key; 
+    if (key === "Backspace") 
+    {
+        handleBackspaceBtnEvent();
+    }
+
 })
